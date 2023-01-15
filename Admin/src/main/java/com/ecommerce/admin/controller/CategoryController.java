@@ -44,7 +44,7 @@ public class CategoryController {
         }catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             attributes.addFlashAttribute("failed" , "Failed to add because duplicate name");
-            return "redirect:/categories";
+   //         return "redirect:/categories";
 
         }catch (Exception e){
             e.printStackTrace();
