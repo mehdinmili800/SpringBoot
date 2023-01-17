@@ -28,23 +28,10 @@ public class ProductServiceImpl implements ProductService {
     private ImageUpload imageUpload;
     @Override
     public List<ProductDto> findAll() {
-        List<ProductDto> productDtoList = new ArrayList<>();
-        List<Product> products = productRepository.findAll();
-        for (Product product : products){
-            ProductDto productDto = new ProductDto();
-            productDto.setId(product.getId());
-            productDto.setName(product.getName());
-            productDto.setDescription(product.getDescription());
-            productDto.setCostPrice(product.getCostPrice());
-            productDto.setSalePrice(product.getSalePrice());
-            productDto.setCurrentQuantity(product.getCurrentQuantity());
-            productDto.setImage(product.getImage());
-            productDto.setCategory(product.getCategory());
-            productDto.setDeleted(product.is_deleted());
-            productDto.setActivated(product.is_activated());
-            productDtoList.add(productDto);
 
-        }
+        List<Product> products = productRepository.findAll();
+        List<ProductDto> productDtoList = transfer(products);
+
         return productDtoList;
     }
 
@@ -148,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductDto> pageProducts(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 5);
         List<ProductDto> products = transfer(productRepository.findAll());
-        Page<ProductDto> productPages = toPage(products, pageable);
+        Page<ProductDto> productPages = toPage(products,pageable);
         return productPages;
     }
 
