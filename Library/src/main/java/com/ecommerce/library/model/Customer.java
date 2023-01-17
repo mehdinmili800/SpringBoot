@@ -13,11 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "costomers", uniqueConstraints = @UniqueConstraint(columnNames = {"username","image","phone_number"}))
+@Table(name = "customers", uniqueConstraints = @UniqueConstraint(columnNames = {"username","image","phone_number"}))
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "custommer_id")
+    @Column(name = "customer_id")
     private Long id;
     @Size(min = 3 , max = 15 , message = "Firset name should have 3-15 characters")
     private String firstName ;
