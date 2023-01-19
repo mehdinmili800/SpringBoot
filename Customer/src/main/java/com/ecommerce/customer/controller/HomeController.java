@@ -27,9 +27,9 @@ public class HomeController {
     @GetMapping("/home")
     public String index(Model model){
         List<Category> categories = categoryService.findAllByActivated();
-        List<ProductDto> productDtos = productService.findAll();
+        List<ProductDto> productDto = productService.findAll();
         model.addAttribute("categories",categories);
-        model.addAttribute("products" , productDtos);
+        model.addAttribute("products" , productDto);
         return "index";
     }
 }

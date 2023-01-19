@@ -21,11 +21,14 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
     @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private ImageUpload imageUpload;
+
+    /*Admin*/
     @Override
     public List<ProductDto> findAll() {
 
@@ -39,11 +42,11 @@ public class ProductServiceImpl implements ProductService {
     public Product save(MultipartFile imageProduct, ProductDto productDto) {
         try {
             Product product = new Product();
-            if (imageProduct == null){
+            if (imageProduct == null) {
                 product.setImage(null);
 
-            }else {
-                if(imageUpload.uploadImage(imageProduct)){
+            } else {
+                if (imageUpload.uploadImage(imageProduct)) {
                     System.out.println("Upload successfully");
                 }
                 product.setImage(Base64.getEncoder().encodeToString(imageProduct.getBytes()));
@@ -57,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
             product.set_deleted(false);
 
             return productRepository.save(product);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -69,12 +72,12 @@ public class ProductServiceImpl implements ProductService {
     public Product update(MultipartFile imageProduct, ProductDto productDto) {
         try {
             Product product = productRepository.getById(productDto.getId());
-            if (imageProduct == null){
+            if (imageProduct == null) {
                 product.setImage(product.getImage());
-            }else {
-                if (imageUpload.checkExisted(imageProduct) == false){
+            } else {
+                if (imageUpload.checkExisted(imageProduct) == false) {
 
-                     imageUpload.uploadImage(imageProduct);
+                    imageUpload.uploadImage(imageProduct);
                 }
                 product.setImage(Base64.getEncoder().encodeToString(imageProduct.getBytes()));
             }
@@ -86,10 +89,9 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory(productDto.getCategory());
 
 
+            return productRepository.save(product);
 
-            return  productRepository.save(product);
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -135,20 +137,12 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductDto> pageProducts(int pageNo) {
         Pageable pageable = PageRequest.of(pageNo, 5);
         List<ProductDto> products = transfer(productRepository.findAll());
-        Page<ProductDto> productPages = toPage(products,pageable);
+        Page<ProductDto> productPages = toPage(products, pageable);
         return productPages;
     }
 
-    @Override
-    public Page<ProductDto> searchProducts(int pageNo, String keyword) {
-        Pageable pageable = PageRequest.of(pageNo, 5);
-        List<ProductDto> productDtoList = transfer(productRepository.searchProductsList(keyword));
-        Page<ProductDto> products = toPage(productDtoList, pageable);
-        return products;
-    }
-
-    private Page toPage(List<ProductDto> list , Pageable pageable){
-        if(pageable.getOffset() >= list.size()){
+    private Page toPage(List<ProductDto> list, Pageable pageable) {
+        if (pageable.getOffset() >= list.size()) {
             return Page.empty();
         }
         int startIndex = (int) pageable.getOffset();
@@ -159,9 +153,9 @@ public class ProductServiceImpl implements ProductService {
         return new PageImpl(subList, pageable, list.size());
     }
 
-    private List<ProductDto> transfer(List<Product> products){
+    private List<ProductDto> transfer(List<Product> products) {
         List<ProductDto> productDtoList = new ArrayList<>();
-        for(Product product : products){
+        for (Product product : products) {
             ProductDto productDto = new ProductDto();
             productDto.setId(product.getId());
             productDto.setName(product.getName());
@@ -178,4 +172,34 @@ public class ProductServiceImpl implements ProductService {
         return productDtoList;
     }
 
+    @Override
+    public Page<ProductDto> searchProducts(int pageNo, String keyword) {
+        Pageable pageable = PageRequest.of(pageNo, 5);
+        List<ProductDto> productDtoList = transfer(productRepository.searchProductsList(keyword));
+        Page<ProductDto> products = toPage(productDtoList, pageable);
+        return products;
+    }
+
+    /*Customer*/
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.getAllProducts();
+    }
+
+    @Override
+    public List<Product> listViewProducts() {
+        return productRepository.listViewProducts();
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
