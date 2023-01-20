@@ -10,6 +10,7 @@ import com.ecommerce.library.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 
 
 @Service
@@ -26,7 +27,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto save(CustomerDto customerDto) {
-        return null;
+
+        Customer customer = new Customer();
+        customer.setFirstName(customerDto.getFirstName());
+        customer.setLastName(customerDto.getLastName());
+        customer.setUsername(customerDto.getUsername());
+        customer.setPassword(customerDto.getPassword());
+        customer.setRoles(Arrays.asList(repository.findByName("CUSTOMER")));
+
+        Customer customerSave = customerRepository.save(customer);
+        return  mapperDTO(customerSave);
     }
 
     @Override
@@ -40,6 +50,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    private CustomerDto mapperDTO(Customer customer){
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setFirstName(customer.getFirstName());
+        customerDto.setLastName(customer.getLastName());
+        customerDto.setPassword(customer.getPassword());
+        customerDto.setUsername(customer.getUsername());
+        return customerDto;
+    }
 
 
 

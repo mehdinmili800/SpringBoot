@@ -42,8 +42,8 @@ public class CustomerConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/*").permitAll()
-                .antMatchers("/admin/*").
-                hasAuthority("ADMIN")
+                .antMatchers("/customer/*").
+                hasAuthority("CUSTOMER")
                 .and()
                 .formLogin()
                 .loginPage("/login")
