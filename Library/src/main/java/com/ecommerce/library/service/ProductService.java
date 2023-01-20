@@ -38,6 +38,8 @@ public interface ProductService {
 
     List<Product> getProductsInCategory(Long categoryId);
 
+    List<Product> filterHighPrice();
+
 
 
 }
