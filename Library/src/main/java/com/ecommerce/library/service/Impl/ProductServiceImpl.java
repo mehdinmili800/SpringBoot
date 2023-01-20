@@ -212,6 +212,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.filterHighPrice();
     }
 
+    @Override
+    public List<Product> filterLowPrice() {
+        return productRepository.filterLowPrice();
+    }
+
 
 }
 
