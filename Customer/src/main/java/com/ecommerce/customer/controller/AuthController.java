@@ -37,26 +37,29 @@ public class AuthController {
                                   BindingResult result,
                                   Model model){
         try {
-            if (result.hasErrors()){
-                model.addAttribute("customerDto",customerDto);
+            if (result.hasErrors()) {
+                model.addAttribute("customerDto", customerDto);
                 return "register";
             }
             Customer customer = customerService.findByUsername(customerDto.getUsername());
-            if (customer != null){
-                model.addAttribute("username","Username have been registered");
+            if(customer != null){
+                model.addAttribute("username", "Username have been registered");
+                model.addAttribute("customerDto",customerDto);
                 return "register";
             }
-            if (customerDto.getPassword().equals(customerDto.getRepeatPassword())){
+            if(customerDto.getPassword().equals(customerDto.getRepeatPassword())){
                 customerDto.setPassword(passwordEncoder.encode(customerDto.getPassword()));
-                model.addAttribute("success","Register successfully");
+                customerService.save(customerDto);
+                model.addAttribute("success", "Register successfully");
                 return "register";
-            }else {
-                model.addAttribute("password","Password is not same");
+            }else{
+                model.addAttribute("password", "Password is not same");
                 model.addAttribute("customerDto",customerDto);
-                return  "register";
+                return "register";
             }
         }catch (Exception e){
-            model.addAttribute("error","Server have ran some problems");
+            model.addAttribute("error", "Server have ran some problems");
+            model.addAttribute("customerDto",customerDto);
         }
         return "register";
     }
